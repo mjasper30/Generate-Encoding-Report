@@ -32,8 +32,6 @@
         <h1 class="m-5 text-center">Generate Encoding Report</h1>
 
         <!-- Encoding for the day -->
-        <h2>Encoded of the day</h2>
-
         <div class="container mt-5 d-flex justify-content-center">
             <!-- Pie Chart -->
             <div class="row">
@@ -71,6 +69,8 @@
 
                     // Get the current day
                     $currentDay = date('j');
+
+                    $dateToday = strval($currentMonth) . " " . strval($currentDay);
 
                     $pieChartData = array();
 
@@ -110,6 +110,9 @@
                         echo "<td colspan='7' class='text-center'>No data encoded for today.</td>";
                         echo "</tr>";
                     }
+
+                    // Close the database connection
+                    // $conn->close();
                     ?>
                 </div>
             </div>
@@ -240,8 +243,7 @@
 
             option = {
                 title: {
-                    text: 'Encoding Report',
-                    subtext: 'June 7, 2023',
+                    text: 'Encoding Report Today',
                     left: 'center'
                 },
                 tooltip: {
