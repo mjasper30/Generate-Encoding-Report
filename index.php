@@ -27,6 +27,13 @@
         width: 50vw;
         overflow: hidden;
     }
+
+    #chart-container-yesterday {
+        position: relative;
+        height: 70vh;
+        width: 50vw;
+        overflow: hidden;
+    }
     </style>
     <div class="container">
         <h1 class="m-5 text-center">Generate Encoding Report</h1>
@@ -40,6 +47,7 @@
                 </div>
                 <div class="ms-5 ps-5 col-5">
                     <?php
+                    date_default_timezone_set('Asia/Manila');
                     // Establish a connection to the database
                     $servername = "localhost";
                     $username = "root";
@@ -60,7 +68,7 @@
                     }
 
                     // Fetch all data from the database
-                    $sql1 = "SELECT handler, COUNT(*) AS count FROM encoded GROUP BY handler;";
+                    $sql1 = "SELECT handler, COUNT(*) AS count FROM encoded WHERE DATE(date_encoded) = CURDATE() GROUP BY handler;";
                     $result = $conn->query($sql1);
 
 
@@ -105,6 +113,75 @@
                         echo "<table class='table table-hover table-bordered mt-3 table-width'>";
                         echo "<thead class='table-primary'>";
                         echo "<tr><th>Encoder</th><th>" . $currentMonth . ' ' . $currentDay . "</th>";
+                        echo "</thead>";
+                        echo "<tr>";
+                        echo "<td colspan='7' class='text-center'>No data encoded for today.</td>";
+                        echo "</tr>";
+                    }
+
+                    // Close the database connection
+                    // $conn->close();
+                    ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Encoding yesterday -->
+        <div class="container mt-5 d-flex justify-content-center">
+            <!-- Pie Chart -->
+            <div class="row">
+                <div class="col-6">
+                    <div id="chart-container-yesterday"></div>
+                </div>
+                <div class="ms-5 ps-5 col-5">
+                    <?php
+
+                    // Fetch all data from the database
+                    $sql4 = "SELECT DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d') AS yesterday_date, handler, COUNT(*) AS count FROM encoded WHERE DATE(date_encoded)=DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d') GROUP BY handler;";
+                    $result2 = $conn->query($sql4);
+
+
+                    // Get the current month
+                    $currentMonth = date('F');
+
+                    // Get the yesterday
+                    $yesterday = date('j') - 1;
+
+                    $dateToday = strval($currentMonth) . " " . strval($yesterday);
+
+                    $pieChartDataYesterday = array();
+
+                    if ($result2->num_rows > 0) {
+                        // Display data in a table
+                        echo "<table class='table table-hover table-bordered mt-3 table-width text-center'>";
+                        echo "<thead class='table-primary'>";
+                        echo "<tr><th>Encoder</th><th>" . $currentMonth . ' ' . $yesterday . "</th></tr>";
+                        echo "</thead>";
+                        $totalEncoded = 0;
+
+                        while ($row = $result2->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td class='table-info'>" . $row["handler"] . "</td>";
+                            echo "<td>" . $row["count"] . "</td>";
+                            echo "</tr>";
+                            $totalEncoded += $row["count"];
+
+                            // Pie Report
+                            $pieChartDataYesterday[] = array(
+                                'value' => intval($row["count"]),
+                                'name' => $row["handler"]
+                            );
+                        }
+                        echo "<tr class='table-warning'>";
+                        echo "<td>Grand Total</td>";
+                        echo "<td>" . $totalEncoded . "</td>";
+                        echo "</tr>";
+
+                        echo "</table>";
+                    } else {
+                        echo "<table class='table table-hover table-bordered mt-3 table-width'>";
+                        echo "<thead class='table-primary'>";
+                        echo "<tr><th>Encoder</th><th>" . $currentMonth . ' ' . $yesterday . "</th>";
                         echo "</thead>";
                         echo "<tr>";
                         echo "<td colspan='7' class='text-center'>No data encoded for today.</td>";
@@ -232,6 +309,7 @@
 
             <script src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
             <script>
+            // today
             var dom = document.getElementById('chart-container');
             var myChart = echarts.init(dom, null, {
                 renderer: 'canvas',
@@ -273,6 +351,49 @@
             }
 
             window.addEventListener('resize', myChart.resize);
+
+            // yesterday
+            var dom1 = document.getElementById('chart-container-yesterday');
+            var myChart1 = echarts.init(dom1, null, {
+                renderer: 'canvas',
+                useDirtyRect: false
+            });
+            var app = {};
+
+            var option1;
+
+            option1 = {
+                title: {
+                    text: 'Encoding Report Yesterday',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [{
+                    name: 'Access From',
+                    type: 'pie',
+                    radius: '50%',
+                    data: <?php echo json_encode($pieChartDataYesterday); ?>,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+
+            if (option1 && typeof option1 === 'object') {
+                myChart1.setOption(option1);
+            }
+
+            window.addEventListener('resize', myChart1.resize);
             </script>
 
             <!-- Bootstrap JS Link -->
