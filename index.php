@@ -34,6 +34,13 @@
         width: 50vw;
         overflow: hidden;
     }
+
+    #chart-container-last-week {
+        position: relative;
+        height: 70vh;
+        width: 50vw;
+        overflow: hidden;
+    }
     </style>
     <div class="container">
         <h1 class="m-5 text-center">Generate Encoding Report</h1>
@@ -182,6 +189,106 @@
                         echo "<table class='table table-hover table-bordered mt-3 table-width'>";
                         echo "<thead class='table-primary'>";
                         echo "<tr><th>Encoder</th><th>" . $currentMonth . ' ' . $yesterday . "</th>";
+                        echo "</thead>";
+                        echo "<tr>";
+                        echo "<td colspan='7' class='text-center'>No data encoded for today.</td>";
+                        echo "</tr>";
+                    }
+
+                    // Close the database connection
+                    // $conn->close();
+                    ?>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Encoding last week -->
+        <div class="container mt-5 d-flex justify-content-center">
+            <!-- Pie Chart -->
+            <div class="row">
+                <div class="col-6">
+                    <div id="chart-container-last-week"></div>
+                </div>
+                <div class="ms-5 ps-5 col-5">
+                    <?php
+
+                    // Fetch all data from the database
+                    $sql5 = "SELECT COUNT(*) as count, handler, SUM(CASE WHEN DATE(date_encoded) = DATE_SUB(CURDATE(), INTERVAL 1 WEEK) THEN 1 ELSE 0 END) AS `sunday`, SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 1 WEEK), INTERVAL 1 DAY) THEN 1 ELSE 0 END) AS `monday` , SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 1 WEEK), INTERVAL 2 DAY) THEN 1 ELSE 0 END) AS `tuesday`, SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 1 WEEK), INTERVAL 3 DAY) THEN 1 ELSE 0 END) AS `wednesday`, SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 4 WEEK), INTERVAL 1 DAY) THEN 1 ELSE 0 END) AS `thursday`, SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 1 WEEK), INTERVAL 5 DAY) THEN 1 ELSE 0 END) AS `friday`, SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 1 WEEK), INTERVAL 6 DAY) THEN 1 ELSE 0 END) AS `saturday` FROM encoded WHERE date_encoded >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK) AND date_encoded < CURDATE() GROUP BY handler;";
+
+                    $result3 = $conn->query($sql5);
+
+                    $pieChartDataLastWeek = array();
+
+                    if ($result3->num_rows > 0) {
+                        // Display data in a table
+                        echo "<table class='table table-hover table-bordered mt-3 table-width text-center'>";
+                        echo "<thead class='table-primary'>";
+
+                        // Set the timezone to the desired timezone
+                        date_default_timezone_set('Asia/Manila');
+
+                        // Get the start and end dates of the last week
+                        // $startOfWeek = strtotime('last week Sunday');
+                        // $endOfWeek = strtotime('last week Saturday');
+
+                        // $startOfWeek = strtotime('last week Monday');
+                        // $endOfWeek = strtotime('last week Sunday');
+
+                        $startOfWeek = strtotime('2023-07-02');
+                        $endOfWeek = strtotime('2023-07-08');
+
+                        // Loop through each day of the last week and store the dates
+                        $currentDate = $startOfWeek;
+                        $formattedDates = array();
+                        while ($currentDate <= $endOfWeek) {
+                            $formattedDate = date('F j', $currentDate);
+                            $formattedDates[] = $formattedDate;
+                            $currentDate = strtotime('+1 day', $currentDate);
+                        }
+
+
+                        echo "<tr>";
+                        echo "<th>Encoder</th>";
+                        // Output the dates of the last week
+                        foreach ($formattedDates as $date) {
+                            echo "<th>" . $date . "</th>";
+                        }
+                        echo "</tr>";
+
+                        echo "</thead>";
+                        $totalEncoded = 0;
+
+                        while ($row = $result3->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td class='table-info'>" . $row["handler"] . "</td>";
+                            echo "<td>" . $row["sunday"] . "</td>";
+                            echo "<td>" . $row["monday"] . "</td>";
+                            echo "<td>" . $row["tuesday"] . "</td>";
+                            echo "<td>" . $row["wednesday"] . "</td>";
+                            echo "<td>" . $row["thursday"] . "</td>";
+                            echo "<td>" . $row["friday"] . "</td>";
+                            echo "<td>" . $row["saturday"] . "</td>";
+
+                            echo "</tr>";
+                            $totalEncoded += $row["count"];
+
+                            // Pie Report
+                            $pieChartDataLastWeek[] = array(
+                                'value' => intval($row["count"]),
+                                'name' => $row["handler"]
+                            );
+                        }
+                        echo "<tr class='table-warning'>";
+                        echo "<td>Grand Total</td>";
+                        echo "<td colspan='7'>" . $totalEncoded . "</td>";
+                        echo "</tr>";
+
+                        echo "</table>";
+                    } else {
+                        echo "<table class='table table-hover table-bordered mt-3 table-width'>";
+                        echo "<thead class='table-primary'>";
+                        echo "<tr><th>Encoder</th><th colspan='7'>No Encoded this Week</th>";
                         echo "</thead>";
                         echo "<tr>";
                         echo "<td colspan='7' class='text-center'>No data encoded for today.</td>";
@@ -394,6 +501,49 @@
             }
 
             window.addEventListener('resize', myChart1.resize);
+
+            //last week
+            var dom2 = document.getElementById('chart-container-last-week');
+            var myChart2 = echarts.init(dom2, null, {
+                renderer: 'canvas',
+                useDirtyRect: false
+            });
+            var app = {};
+
+            var option2;
+
+            option2 = {
+                title: {
+                    text: 'Encoding Report Last Week',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [{
+                    name: 'Access From',
+                    type: 'pie',
+                    radius: '50%',
+                    data: <?php echo json_encode($pieChartDataLastWeek); ?>,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+
+            if (option2 && typeof option2 === 'object') {
+                myChart2.setOption(option2);
+            }
+
+            window.addEventListener('resize', myChart2.resize);
             </script>
 
             <!-- Bootstrap JS Link -->
