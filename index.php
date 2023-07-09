@@ -51,6 +51,16 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        .slide-left {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scale-up {
+            opacity: 1;
+            transform: scale(1);
+        }
     </style>
     <div class="container">
         <h1 class="m-5 text-center">Generate Encoding Report</h1>
@@ -148,7 +158,7 @@
             <!-- Pie Chart -->
             <div class="row">
                 <div class="col-6">
-                    <div id="chart-container-yesterday" class="scroll-animation"></div>
+                    <div id="chart-container-yesterday" class="scroll-animation scale-up"></div>
                 </div>
                 <div class="ms-5 ps-5 col-5">
                     <?php
@@ -560,7 +570,13 @@
                         var windowHeight = window.innerHeight;
 
                         if (elementPosition < windowHeight * 0.8 && !element.classList.contains('fade-in')) {
-                            element.classList.add('fade-in');
+                            if (element.classList.contains('slide-left')) {
+                                element.classList.add('slide-left');
+                            } else if (element.classList.contains('scale-up')) {
+                                element.classList.add('scale-up');
+                            } else {
+                                element.classList.add('fade-in');
+                            }
                         }
                     }
                 }
