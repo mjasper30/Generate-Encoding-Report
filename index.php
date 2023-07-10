@@ -6,61 +6,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generate Encoding Report</title>
     <!-- Bootstrap CSS Link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 
 <body>
     <style>
-        .table-width {
-            width: 200px;
-        }
+    .table-width {
+        width: 200px;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+    }
 
-        #chart-container {
-            position: relative;
-            height: 70vh;
-            width: 50vw;
-            overflow: hidden;
-        }
+    #chart-container {
+        position: relative;
+        height: 70vh;
+        width: 50vw;
+        overflow: hidden;
+    }
 
-        #chart-container-yesterday {
-            position: relative;
-            height: 70vh;
-            width: 50vw;
-            overflow: hidden;
-        }
+    #chart-container-yesterday {
+        position: relative;
+        height: 70vh;
+        width: 50vw;
+        overflow: hidden;
+    }
 
-        #chart-container-last-week {
-            position: relative;
-            height: 70vh;
-            width: 50vw;
-            overflow: hidden;
-        }
+    #chart-container-last-week {
+        position: relative;
+        height: 70vh;
+        width: 50vw;
+        overflow: hidden;
+    }
 
-        .scroll-animation {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.5s, transform 0.5s;
-        }
+    .scroll-animation {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.5s, transform 0.5s;
+    }
 
-        .fade-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .fade-in {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
-        .slide-left {
-            opacity: 1;
-            transform: translateX(0);
-        }
+    .slide-left {
+        opacity: 1;
+        transform: translateX(0);
+    }
 
-        .scale-up {
-            opacity: 1;
-            transform: scale(1);
-        }
+    .scale-up {
+        opacity: 1;
+        transform: scale(1);
+    }
     </style>
     <div class="container">
         <h1 class="m-5 text-center">Generate Encoding Report</h1>
@@ -145,9 +146,6 @@
                         echo "<td colspan='7' class='text-center'>No data encoded for today.</td>";
                         echo "</tr>";
                     }
-
-                    // Close the database connection
-                    // $conn->close();
                     ?>
                 </div>
             </div>
@@ -214,9 +212,6 @@
                         echo "<td colspan='7' class='text-center'>No data encoded for today.</td>";
                         echo "</tr>";
                     }
-
-                    // Close the database connection
-                    // $conn->close();
                     ?>
                 </div>
             </div>
@@ -249,14 +244,12 @@
                         date_default_timezone_set('Asia/Manila');
 
                         // Get the start and end dates of the last week
-                        // $startOfWeek = strtotime('last week Sunday');
-                        // $endOfWeek = strtotime('last week Saturday');
+                        $date = date('Y-m-d');  // Current date
+                        $startOfWeekFormated = date('Y-m-d', strtotime($date . ' -1 week'));
+                        $endOfWeekFormated = date('Y-m-d', strtotime($date . ' -1 week +6 days'));
 
-                        // $startOfWeek = strtotime('last week Monday');
-                        // $endOfWeek = strtotime('last week Sunday');
-
-                        $startOfWeek = strtotime('2023-07-02');
-                        $endOfWeek = strtotime('2023-07-08');
+                        $startOfWeek = strtotime($startOfWeekFormated);
+                        $endOfWeek = strtotime($endOfWeekFormated);
 
                         // Loop through each day of the last week and store the dates
                         $currentDate = $startOfWeek;
@@ -389,7 +382,8 @@
         ?>
 
         <!-- Add Employer Modal -->
-        <div class="modal fade" id="addEmployerModal" tabindex="-1" aria-labelledby="addEmployerLabel" aria-hidden="true">
+        <div class="modal fade" id="addEmployerModal" tabindex="-1" aria-labelledby="addEmployerLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -400,23 +394,28 @@
                         <form method="post" action="">
                             <div class="mb-3">
                                 <label for="handler" class="form-label">Handler</label>
-                                <input type="text" class="form-control" id="handler" name="handler" placeholder="ex. letty" required>
+                                <input type="text" class="form-control" id="handler" name="handler"
+                                    placeholder="ex. letty" required>
                             </div>
                             <div class="mb-3">
                                 <label for="firstname" class="form-label">Firstname</label>
-                                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="ex. Juan" required>
+                                <input type="text" class="form-control" id="firstname" name="firstname"
+                                    placeholder="ex. Juan" required>
                             </div>
                             <div class="mb-3">
                                 <label for="lastname" class="form-label">Lastname</label>
-                                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="ex. Dela Cruz" required>
+                                <input type="text" class="form-control" id="lastname" name="lastname"
+                                    placeholder="ex. Dela Cruz" required>
                             </div>
                             <div class="mb-3">
                                 <label for="middlename" class="form-label">Middlename</label>
-                                <input type="text" class="form-control" id="middlename" name="middlename" placeholder="ex. Cardo" required>
+                                <input type="text" class="form-control" id="middlename" name="middlename"
+                                    placeholder="ex. Cardo" required>
                             </div>
                             <div class="mb-3">
                                 <label for="hanjobtitledler" class="form-label">Jobtitle</label>
-                                <input type="text" class="form-control" id="jobtitle" name="jobtitle" placeholder="ex. Pipe Fitter" required>
+                                <input type="text" class="form-control" id="jobtitle" name="jobtitle"
+                                    placeholder="ex. Pipe Fitter" required>
                             </div>
 
                             <div class="modal-footer">
@@ -430,162 +429,164 @@
 
             <script src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
             <script>
-                // today
-                var dom = document.getElementById('chart-container');
-                var myChart = echarts.init(dom, null, {
-                    renderer: 'canvas',
-                    useDirtyRect: false
-                });
-                var app = {};
+            // today
+            var dom = document.getElementById('chart-container');
+            var myChart = echarts.init(dom, null, {
+                renderer: 'canvas',
+                useDirtyRect: false
+            });
+            var app = {};
 
-                var option;
+            var option;
 
-                option = {
-                    title: {
-                        text: 'Encoding Report Today',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 'left'
-                    },
-                    series: [{
-                        name: 'Access From',
-                        type: 'pie',
-                        radius: '50%',
-                        data: <?php echo json_encode($pieChartData); ?>,
-                        emphasis: {
-                            itemStyle: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
+            option = {
+                title: {
+                    text: 'Encoding Report Today',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [{
+                    name: 'Access From',
+                    type: 'pie',
+                    radius: '50%',
+                    data: <?php echo json_encode($pieChartData); ?>,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
                         }
-                    }]
-                };
+                    }
+                }]
+            };
 
-                if (option && typeof option === 'object') {
-                    myChart.setOption(option);
-                }
+            if (option && typeof option === 'object') {
+                myChart.setOption(option);
+            }
 
-                window.addEventListener('resize', myChart.resize);
+            window.addEventListener('resize', myChart.resize);
 
-                // yesterday
-                var dom1 = document.getElementById('chart-container-yesterday');
-                var myChart1 = echarts.init(dom1, null, {
-                    renderer: 'canvas',
-                    useDirtyRect: false
-                });
-                var app = {};
+            // yesterday
+            var dom1 = document.getElementById('chart-container-yesterday');
+            var myChart1 = echarts.init(dom1, null, {
+                renderer: 'canvas',
+                useDirtyRect: false
+            });
+            var app = {};
 
-                var option1;
+            var option1;
 
-                option1 = {
-                    title: {
-                        text: 'Encoding Report Yesterday',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 'left'
-                    },
-                    series: [{
-                        name: 'Access From',
-                        type: 'pie',
-                        radius: '50%',
-                        data: <?php echo json_encode($pieChartDataYesterday); ?>,
-                        emphasis: {
-                            itemStyle: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
+            option1 = {
+                title: {
+                    text: 'Encoding Report Yesterday',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [{
+                    name: 'Access From',
+                    type: 'pie',
+                    radius: '50%',
+                    data: <?php echo json_encode($pieChartDataYesterday); ?>,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
                         }
-                    }]
-                };
+                    }
+                }]
+            };
 
-                if (option1 && typeof option1 === 'object') {
-                    myChart1.setOption(option1);
-                }
+            if (option1 && typeof option1 === 'object') {
+                myChart1.setOption(option1);
+            }
 
-                window.addEventListener('resize', myChart1.resize);
+            window.addEventListener('resize', myChart1.resize);
 
-                //last week
-                var dom2 = document.getElementById('chart-container-last-week');
-                var myChart2 = echarts.init(dom2, null, {
-                    renderer: 'canvas',
-                    useDirtyRect: false
-                });
-                var app = {};
+            //last week
+            var dom2 = document.getElementById('chart-container-last-week');
+            var myChart2 = echarts.init(dom2, null, {
+                renderer: 'canvas',
+                useDirtyRect: false
+            });
+            var app = {};
 
-                var option2;
+            var option2;
 
-                option2 = {
-                    title: {
-                        text: 'Encoding Report Last Week',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 'left'
-                    },
-                    series: [{
-                        name: 'Access From',
-                        type: 'pie',
-                        radius: '50%',
-                        data: <?php echo json_encode($pieChartDataLastWeek); ?>,
-                        emphasis: {
-                            itemStyle: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
+            option2 = {
+                title: {
+                    text: 'Encoding Report Last Week',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [{
+                    name: 'Access From',
+                    type: 'pie',
+                    radius: '50%',
+                    data: <?php echo json_encode($pieChartDataLastWeek); ?>,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
                         }
-                    }]
-                };
+                    }
+                }]
+            };
 
-                if (option2 && typeof option2 === 'object') {
-                    myChart2.setOption(option2);
-                }
+            if (option2 && typeof option2 === 'object') {
+                myChart2.setOption(option2);
+            }
 
-                window.addEventListener('resize', myChart2.resize);
+            window.addEventListener('resize', myChart2.resize);
             </script>
 
             <script>
-                function handleScroll() {
-                    var animatedElements = document.getElementsByClassName('scroll-animation');
+            function handleScroll() {
+                var animatedElements = document.getElementsByClassName('scroll-animation');
 
-                    for (var i = 0; i < animatedElements.length; i++) {
-                        var element = animatedElements[i];
-                        var elementPosition = element.getBoundingClientRect().top;
-                        var windowHeight = window.innerHeight;
+                for (var i = 0; i < animatedElements.length; i++) {
+                    var element = animatedElements[i];
+                    var elementPosition = element.getBoundingClientRect().top;
+                    var windowHeight = window.innerHeight;
 
-                        if (elementPosition < windowHeight * 0.8 && !element.classList.contains('fade-in')) {
-                            if (element.classList.contains('slide-left')) {
-                                element.classList.add('slide-left');
-                            } else if (element.classList.contains('scale-up')) {
-                                element.classList.add('scale-up');
-                            } else {
-                                element.classList.add('fade-in');
-                            }
+                    if (elementPosition < windowHeight * 0.8 && !element.classList.contains('fade-in')) {
+                        if (element.classList.contains('slide-left')) {
+                            element.classList.add('slide-left');
+                        } else if (element.classList.contains('scale-up')) {
+                            element.classList.add('scale-up');
+                        } else {
+                            element.classList.add('fade-in');
                         }
                     }
                 }
+            }
 
-                window.addEventListener('scroll', handleScroll);
+            window.addEventListener('scroll', handleScroll);
             </script>
 
             <!-- Bootstrap JS Link -->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+                crossorigin="anonymous"></script>
 </body>
 
 </html>
