@@ -77,16 +77,16 @@
                     <?php
                     date_default_timezone_set('Asia/Manila');
                     // Establish a connection to the database
-                    $servername = "localhost";
-                    $username = "root";
-                    $password = "";
-                    $database = "generate_encoding_report";
+                    // $servername = "localhost";
+                    // $username = "root";
+                    // $password = "";
+                    // $database = "generate_encoding_report";
 
                     //hosting 
-                    // $servername = "localhost";
-                    // $username = "ppibdzqe_ppibdzqe";
-                    // $password = "f(ZYu7pGq2g{";
-                    // $database = "ppibdzqe_post_and_comment";
+                    $servername = "localhost";
+                    $username = "ppibdzqe_ppibdzqe";
+                    $password = "f(ZYu7pGq2g{";
+                    $database = "ppibdzqe_post_and_comment";
 
                     $conn = new mysqli($servername, $username, $password, $database);
 
@@ -298,7 +298,7 @@
                             echo "<td>" . $row["thursday"] . "</td>";
                             echo "<td>" . $row["friday"] . "</td>";
                             echo "<td class='table-danger'>" . $row["saturday"] . "</td>";
-                            echo "<td class='table-warning'>" . $row["sunday"] + $row["monday"] + $row["tuesday"] + $row["wednesday"] + $row["thursday"] + $row["friday"] + $row["saturday"] . "</td>";
+                            echo "<td class='table-warning'>" . ($row["sunday"] + $row["monday"] + $row["tuesday"] + $row["wednesday"] + $row["thursday"] + $row["friday"] + $row["saturday"]) . "</td>";
 
                             echo "</tr>";
 
@@ -317,7 +317,7 @@
                         echo "<td>" . $totalEncodedThursday . "</td>";
                         echo "<td>" . $totalEncodedFriday . "</td>";
                         echo "<td>" . $totalEncodedSaturday . "</td>";
-                        echo "<td>" . $totalEncoded . "</td>";
+                        echo "<td class='table-success'>" . $totalEncoded . "</td>";
                         echo "</tr>";
 
                         echo "</table>";
