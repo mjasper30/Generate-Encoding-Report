@@ -245,8 +245,8 @@
 
                         // Get the start and end dates of the last week
                         $date = date('Y-m-d');  // Current date
-                        $startOfWeekFormated = date('Y-m-d', strtotime($date . ' -1 week'));
-                        $endOfWeekFormated = date('Y-m-d', strtotime($date . ' -1 week +6 days'));
+                        $startOfWeekFormated = date('Y-m-d', strtotime($date . ' -1 week -1 day'));
+                        $endOfWeekFormated = date('Y-m-d', strtotime($date . ' -1 week +5 days'));
 
                         $startOfWeek = strtotime($startOfWeekFormated);
                         $endOfWeek = strtotime($endOfWeekFormated);
