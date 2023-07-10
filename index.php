@@ -77,16 +77,16 @@
                     <?php
                     date_default_timezone_set('Asia/Manila');
                     // Establish a connection to the database
-                    // $servername = "localhost";
-                    // $username = "root";
-                    // $password = "";
-                    // $database = "generate_encoding_report";
+                    $servername = "localhost";
+                    $username = "root";
+                    $password = "";
+                    $database = "generate_encoding_report";
 
                     //hosting 
-                    $servername = "localhost";
-                    $username = "ppibdzqe_ppibdzqe";
-                    $password = "f(ZYu7pGq2g{";
-                    $database = "ppibdzqe_post_and_comment";
+                    // $servername = "localhost";
+                    // $username = "ppibdzqe_ppibdzqe";
+                    // $password = "f(ZYu7pGq2g{";
+                    // $database = "ppibdzqe_post_and_comment";
 
                     $conn = new mysqli($servername, $username, $password, $database);
 
