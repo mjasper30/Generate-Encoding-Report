@@ -267,24 +267,40 @@
                         foreach ($formattedDates as $date) {
                             echo "<th>" . $date . "</th>";
                         }
+                        echo "<th>Total</th>";
                         echo "</tr>";
 
                         echo "</thead>";
                         $totalEncoded = 0;
+                        $totalEncodedSunday = 0;
+                        $totalEncodedMonday = 0;
+                        $totalEncodedTuesday = 0;
+                        $totalEncodedWednesday = 0;
+                        $totalEncodedThursday = 0;
+                        $totalEncodedFriday = 0;
+                        $totalEncodedSaturday = 0;
 
                         while ($row = $result3->fetch_assoc()) {
+                            $totalEncoded += $row["sunday"] + $row["monday"] + $row["tuesday"] + $row["wednesday"] + $row["thursday"] + $row["friday"] + $row["saturday"];
+                            $totalEncodedSunday += $row["sunday"];
+                            $totalEncodedMonday += $row["monday"];
+                            $totalEncodedTuesday += $row["tuesday"];
+                            $totalEncodedWednesday += $row["wednesday"];
+                            $totalEncodedThursday += $row["thursday"];
+                            $totalEncodedFriday += $row["friday"];
+                            $totalEncodedSaturday += $row["saturday"];
                             echo "<tr>";
                             echo "<td class='table-info'>" . $row["handler"] . "</td>";
-                            echo "<td>" . $row["sunday"] . "</td>";
+                            echo "<td class='table-danger'>" . $row["sunday"] . "</td>";
                             echo "<td>" . $row["monday"] . "</td>";
                             echo "<td>" . $row["tuesday"] . "</td>";
                             echo "<td>" . $row["wednesday"] . "</td>";
                             echo "<td>" . $row["thursday"] . "</td>";
                             echo "<td>" . $row["friday"] . "</td>";
-                            echo "<td>" . $row["saturday"] . "</td>";
+                            echo "<td class='table-danger'>" . $row["saturday"] . "</td>";
+                            echo "<td class='table-warning'>" . $row["sunday"] + $row["monday"] + $row["tuesday"] + $row["wednesday"] + $row["thursday"] + $row["friday"] + $row["saturday"] . "</td>";
 
                             echo "</tr>";
-                            $totalEncoded += $row["count"];
 
                             // Pie Report
                             $pieChartDataLastWeek[] = array(
@@ -294,7 +310,14 @@
                         }
                         echo "<tr class='table-warning'>";
                         echo "<td>Grand Total</td>";
-                        echo "<td colspan='7'>" . $totalEncoded . "</td>";
+                        echo "<td>" . $totalEncodedSunday . "</td>";
+                        echo "<td>" . $totalEncodedMonday . "</td>";
+                        echo "<td>" . $totalEncodedTuesday . "</td>";
+                        echo "<td>" . $totalEncodedWednesday . "</td>";
+                        echo "<td>" . $totalEncodedThursday . "</td>";
+                        echo "<td>" . $totalEncodedFriday . "</td>";
+                        echo "<td>" . $totalEncodedSaturday . "</td>";
+                        echo "<td>" . $totalEncoded . "</td>";
                         echo "</tr>";
 
                         echo "</table>";
@@ -308,8 +331,6 @@
                         echo "</tr>";
                     }
 
-                    // Close the database connection
-                    // $conn->close();
                     ?>
                 </div>
             </div>
