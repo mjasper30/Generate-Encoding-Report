@@ -292,13 +292,13 @@
                             echo "<tr>";
                             echo "<td class='table-info'>" . $row["handler"] . "</td>";
                             echo "<td class='table-danger'>" . $row["sunday"] . "</td>";
-                            echo "<td>" . $row["monday"] . "</td>";
-                            echo "<td>" . $row["tuesday"] . "</td>";
-                            echo "<td>" . $row["wednesday"] . "</td>";
-                            echo "<td>" . $row["thursday"] . "</td>";
-                            echo "<td>" . $row["friday"] . "</td>";
+                            echo "<td class='table-warning'>" . $row["monday"] . "</td>";
+                            echo "<td class='table-warning'>" . $row["tuesday"] . "</td>";
+                            echo "<td class='table-warning'>" . $row["wednesday"] . "</td>";
+                            echo "<td class='table-warning'>" . $row["thursday"] . "</td>";
+                            echo "<td class='table-warning'>" . $row["friday"] . "</td>";
                             echo "<td class='table-danger'>" . $row["saturday"] . "</td>";
-                            echo "<td class='table-warning'>" . ($row["sunday"] + $row["monday"] + $row["tuesday"] + $row["wednesday"] + $row["thursday"] + $row["friday"] + $row["saturday"]) . "</td>";
+                            echo "<td class='table-success'>" . ($row["sunday"] + $row["monday"] + $row["tuesday"] + $row["wednesday"] + $row["thursday"] + $row["friday"] + $row["saturday"]) . "</td>";
 
                             echo "</tr>";
 
@@ -308,15 +308,15 @@
                                 'name' => $row["handler"]
                             );
                         }
-                        echo "<tr class='table-warning'>";
+                        echo "<tr class='table-success'>";
                         echo "<td>Grand Total</td>";
-                        echo "<td>" . $totalEncodedSunday . "</td>";
-                        echo "<td>" . $totalEncodedMonday . "</td>";
-                        echo "<td>" . $totalEncodedTuesday . "</td>";
-                        echo "<td>" . $totalEncodedWednesday . "</td>";
-                        echo "<td>" . $totalEncodedThursday . "</td>";
-                        echo "<td>" . $totalEncodedFriday . "</td>";
-                        echo "<td>" . $totalEncodedSaturday . "</td>";
+                        echo "<td class='table-danger'>" . $totalEncodedSunday . "</td>";
+                        echo "<td class='table-success'>" . $totalEncodedMonday . "</td>";
+                        echo "<td class='table-success'>" . $totalEncodedTuesday . "</td>";
+                        echo "<td class='table-success'>" . $totalEncodedWednesday . "</td>";
+                        echo "<td class='table-success'>" . $totalEncodedThursday . "</td>";
+                        echo "<td class='table-success'>" . $totalEncodedFriday . "</td>";
+                        echo "<td class='table-danger'>" . $totalEncodedSaturday . "</td>";
                         echo "<td class='table-success'>" . $totalEncoded . "</td>";
                         echo "</tr>";
 
