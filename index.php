@@ -229,7 +229,18 @@
                     <?php
 
                     // Fetch all data from the database
-                    $sql5 = "SELECT COUNT(*) as count, handler, SUM(CASE WHEN DATE(date_encoded) = DATE_SUB(CURDATE(), INTERVAL 1 WEEK) THEN 1 ELSE 0 END) AS `sunday`, SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 1 WEEK), INTERVAL 1 DAY) THEN 1 ELSE 0 END) AS `monday` , SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 1 WEEK), INTERVAL 2 DAY) THEN 1 ELSE 0 END) AS `tuesday`, SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 1 WEEK), INTERVAL 3 DAY) THEN 1 ELSE 0 END) AS `wednesday`, SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 4 WEEK), INTERVAL 1 DAY) THEN 1 ELSE 0 END) AS `thursday`, SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 1 WEEK), INTERVAL 5 DAY) THEN 1 ELSE 0 END) AS `friday`, SUM(CASE WHEN DATE(date_encoded) = DATE_ADD(DATE_SUB(CURDATE(), INTERVAL 1 WEEK), INTERVAL 6 DAY) THEN 1 ELSE 0 END) AS `saturday` FROM encoded WHERE date_encoded >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK) AND date_encoded < CURDATE() GROUP BY handler;";
+                    $sql5 = "SELECT COUNT(*) as count, handler,
+                    SUM(CASE WHEN DAYOFWEEK(date_encoded) = 1 THEN 1 ELSE 0 END) AS `sunday`,
+                    SUM(CASE WHEN DAYOFWEEK(date_encoded) = 2 THEN 1 ELSE 0 END) AS `monday`,
+                    SUM(CASE WHEN DAYOFWEEK(date_encoded) = 3 THEN 1 ELSE 0 END) AS `tuesday`,
+                    SUM(CASE WHEN DAYOFWEEK(date_encoded) = 4 THEN 1 ELSE 0 END) AS `wednesday`,
+                    SUM(CASE WHEN DAYOFWEEK(date_encoded) = 5 THEN 1 ELSE 0 END) AS `thursday`,
+                    SUM(CASE WHEN DAYOFWEEK(date_encoded) = 6 THEN 1 ELSE 0 END) AS `friday`,
+                    SUM(CASE WHEN DAYOFWEEK(date_encoded) = 7 THEN 1 ELSE 0 END) AS `saturday`
+             FROM encoded
+             WHERE date_encoded >= DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE()) + 6 DAY)
+                   AND date_encoded < DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE()) - 1 DAY)
+             GROUP BY handler;";
 
                     $result3 = $conn->query($sql5);
 
@@ -243,10 +254,49 @@
                         // Set the timezone to the desired timezone
                         date_default_timezone_set('Asia/Manila');
 
+                        $currentDay = date('l');
+                        $asOfSundayLastWeek = '';
+                        $asOfSaturdayLastWeek = '';
+
+                        if($currentDay == 'Sunday'){
+                            $asOfSundayLastWeek = ' -7 day';
+                            $asOfSaturdayLastWeek = ' -1 day';
+                        }
+
+                        if($currentDay == 'Monday'){
+                            $asOfSundayLastWeek = ' -8 day';
+                            $asOfSaturdayLastWeek = ' -2 day';
+                        }
+
+                        if($currentDay == 'Tuesday'){
+                            $asOfSundayLastWeek = ' -9 day';
+                            $asOfSaturdayLastWeek = ' -3 day';
+                        }
+
+                        if($currentDay == 'Wednesday'){
+                            $asOfSundayLastWeek = ' -10 day';
+                            $asOfSaturdayLastWeek = ' -4 day';
+                        }
+
+                        if($currentDay == 'Thursday'){
+                            $asOfSundayLastWeek = ' -11 day';
+                            $asOfSaturdayLastWeek = ' -5 day';
+                        }
+    
+                        if($currentDay == 'Friday'){
+                            $asOfSundayLastWeek = ' -12 day';
+                            $asOfSaturdayLastWeek = ' -6 day';
+                        }
+
+                        if($currentDay == 'Saturday'){
+                            $asOfSundayLastWeek = ' -12 day';
+                            $asOfSaturdayLastWeek = ' -7 day';
+                        }
+
                         // Get the start and end dates of the last week
                         $date = date('Y-m-d');  // Current date
-                        $startOfWeekFormated = date('Y-m-d', strtotime($date . ' -1 week -1 day'));
-                        $endOfWeekFormated = date('Y-m-d', strtotime($date . ' -1 week +5 days'));
+                        $startOfWeekFormated = date('Y-m-d', strtotime($date . $asOfSundayLastWeek));
+                        $endOfWeekFormated = date('Y-m-d', strtotime($date . $asOfSaturdayLastWeek));
 
                         $startOfWeek = strtotime($startOfWeekFormated);
                         $endOfWeek = strtotime($endOfWeekFormated);
