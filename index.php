@@ -289,7 +289,7 @@
                         }
 
                         if($currentDay == 'Saturday'){
-                            $asOfSundayLastWeek = ' -12 day';
+                            $asOfSundayLastWeek = ' -13 day';
                             $asOfSaturdayLastWeek = ' -7 day';
                         }
 
